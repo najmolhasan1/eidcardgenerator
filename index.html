@@ -522,9 +522,8 @@
 
         .user-image-container img {
             width: 100%;
-            height: 100%;
-            overflow: hidden;
-            object-fit: cover;
+            /* height: 100%; */
+ 
         }
         input[type="color"] {
         height: 30px; /* Adjust the height as needed */
@@ -665,11 +664,11 @@
                 </div>
                 
                 <div class="control-section">
-                    <h3>আপনার বার্তা লিখুন</h3>
+                    <h3>আপনার মেসেজ লিখুন</h3>
                     <div class="form-group">
-                        <label for="message">বার্তা:</label>
+                        <label for="message">মেসেজ:</label>
                         <textarea id="message" placeholder="আপনার ঈদ শুভেচ্ছা বার্তা লিখুন...">আপনাকে ও আপনার পরিবারকে জানাই ঈদের শুভেচ্ছা। আল্লাহ আপনাদের সবার জীবনে শান্তি ও সমৃদ্ধি বয়ে আনুক।</textarea>
-                        <label for="messageColor">বার্তার রং:</label>
+                        <label for="messageColor">মেসেজের কালার:</label>
                         <input type="color" id="messageColor" value="#000000">
                       </div>
                 </div>
@@ -679,18 +678,18 @@
                     <div class="form-group">
                         <label for="name">আপনার নাম:</label>
                         <input type="text" id="name" placeholder="আপনার নাম লিখুন" value="আবদুল করিম">
-                        <label for="nameColor">নামের রং:</label>
+                        <label for="nameColor">নামের কালার:</label>
                         <input type="color" id="nameColor" value="#000000">
                     </div>
                 </div>
 
                 <!-- কন্ট্রোল সেকশনে এই কোডটি যোগ করুন (অতিরিক্ত বিকল্প সেকশনের আগে) -->
 <div class="control-section">
-  <h3>নিজের ছবি যোগ করুন</h3>
+  <h3>নিজের ছবি যুক্ত করুন</h3>
   <div class="form-group">
       <label for="userImage">ছবি আপলোড করুন:</label>
       <input type="file" id="userImage" accept="image/*">
-      <label for="borderColor">ছবির বর্ডার রং:</label>
+      <label for="borderColor">ছবির বর্ডারে কালার:</label>
       <input type="color" id="borderColor" value="#FFD700">
   </div>
   <div class="form-group">
@@ -745,7 +744,7 @@
         </div>
         
         <div class="footer">
-            <p>© ২০২৫ ঈদ কার্ড জেনারেটর। সর্বসত্ত্ব সংরক্ষিত।</p>
+            <p>© ২০২৫ ঈদ কার্ড জেনারেটর। সর্বসত্ত্ব সংরক্ষিত || Developed By <a href="https://www.facebook.com/najmolhasan2">Md.Najmol Hasan</a></p>
         </div>
     </div>
 
@@ -824,7 +823,7 @@
             // Use html2canvas to capture the card
             html2canvas(cardPreview, {
                 backgroundColor: null,
-                scale: 2, // Better quality
+                scale: 8, // Better quality
                 logging: false,
                 allowTaint: true,
                 useCORS: true

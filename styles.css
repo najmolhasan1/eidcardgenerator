@@ -538,4 +538,7 @@
         margin-top: 7px;
         cursor: pointer;
     }
+    input[type="text"]{
+      font-weight: bold;
+    }
     }

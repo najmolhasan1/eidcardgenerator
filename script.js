@@ -108,78 +108,374 @@
         }, 100);
     });
     
-    // Share functionality using Web Share API
-    shareBtn.addEventListener('click', function() {
-        // First check if the browser supports the Web Share API
-        if (navigator.share) {
-            // Use html2canvas to capture the card
-            const loadingMessage = document.createElement('div');
-            loadingMessage.textContent = 'আপনার কার্ড শেয়ার করার জন্য প্রস্তুত করা হচ্ছে...';
-            loadingMessage.style.position = 'fixed';
-            loadingMessage.style.top = '50%';
-            loadingMessage.style.left = '50%';
-            loadingMessage.style.transform = 'translate(-50%, -50%)';
-            loadingMessage.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
-            loadingMessage.style.color = 'white';
-            loadingMessage.style.padding = '15px 20px';
-            loadingMessage.style.borderRadius = '5px';
-            loadingMessage.style.zIndex = '1000';
-            document.body.appendChild(loadingMessage);
+      // Modify the share button functionality to work on all devices including mobile
+shareBtn.addEventListener('click', function() {
+    // First capture the card as an image
+    const loadingMessage = document.createElement('div');
+    loadingMessage.textContent = 'আপনার কার্ড শেয়ার করার জন্য প্রস্তুত করা হচ্ছে...';
+    loadingMessage.style.position = 'fixed';
+    loadingMessage.style.top = '50%';
+    loadingMessage.style.left = '50%';
+    loadingMessage.style.transform = 'translate(-50%, -50%)';
+    loadingMessage.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    loadingMessage.style.color = 'white';
+    loadingMessage.style.padding = '15px 20px';
+    loadingMessage.style.borderRadius = '5px';
+    loadingMessage.style.zIndex = '1000';
+    document.body.appendChild(loadingMessage);
+    
+    html2canvas(cardPreview, {
+        backgroundColor: null,
+        scale: 4, // Good quality but not too large
+        logging: false,
+        allowTaint: true,
+        useCORS: true
+    }).then(canvas => {
+        // Convert canvas to blob
+        canvas.toBlob(function(blob) {
+            // Create a FormData object to send the image to the server
+            const formData = new FormData();
+            formData.append('image', blob, 'eid-mubarak-card.jpg');
             
-            html2canvas(cardPreview, {
-                backgroundColor: null,
-                scale: 8, // Better quality
-                logging: false,
-                allowTaint: true,
-                useCORS: true
-            }).then(canvas => {
+            // Upload to ImgBB
+            fetch('https://api.imgbb.com/1/upload?key=ce97b288a4d204bbbb7b2f637eee72e2', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
                 // Remove the loading message
                 document.body.removeChild(loadingMessage);
                 
-                // Convert canvas to blob
-                canvas.toBlob(async function(blob) {
-                    // Create a File object
-                    const file = new File([blob], 'eid-mubarak-card.png', { type: 'image/jpeg' });
+                if (data.success) {
+                    // Get the shareable URL (direct display URL is better for sharing)
+                    const shareableURL = data.data.display_url || data.data.url;
                     
-                    try {
-                        // Share the file
-                        await navigator.share({
-                            title: 'ঈদ মুবারক',
-                            text: 'আমার তৈরি করা ঈদ কার্ড দেখুন!',
-                            files: [file]
-                        });
-                        console.log('Card shared successfully');
-                    } catch (error) {
-                        // If file sharing fails, try without file (some devices don't support file sharing)
-                        if (error.name !== 'AbortError') {
-                            try {
-                                await navigator.share({
-                                    title: 'ঈদ মুবারক',
-                                    text: 'আমার তৈরি করা ঈদ কার্ড দেখুন!'
-                                });
-                                console.log('Card shared successfully (without file)');
-                            } catch (fallbackError) {
-                                if (fallbackError.name !== 'AbortError') {
-                                    alert('শেয়ার করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
-                                    console.error('Share error:', fallbackError);
-                                }
-                            }
-                        }
+                    // Create a modal to show sharing options
+                    const shareModal = document.createElement('div');
+                    shareModal.style.position = 'fixed';
+                    shareModal.style.top = '0';
+                    shareModal.style.left = '0';
+                    shareModal.style.width = '100%';
+                    shareModal.style.height = '100%';
+                    shareModal.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
+                    shareModal.style.zIndex = '1000';
+                    shareModal.style.display = 'flex';
+                    shareModal.style.flexDirection = 'column';
+                    shareModal.style.justifyContent = 'center';
+                    shareModal.style.alignItems = 'center';
+                    shareModal.style.padding = '20px';
+                    
+                    // Create modal content
+                    const modalContent = document.createElement('div');
+                    modalContent.style.backgroundColor = 'white';
+                    modalContent.style.borderRadius = '10px';
+                    modalContent.style.padding = '20px';
+                    modalContent.style.maxWidth = '90%';
+                    modalContent.style.width = '350px';
+                    modalContent.style.maxHeight = '90vh';
+                    modalContent.style.overflowY = 'auto';
+                    modalContent.style.display = 'flex';
+                    modalContent.style.flexDirection = 'column';
+                    modalContent.style.gap = '15px';
+                    
+                    // Create modal title
+                    const modalTitle = document.createElement('h3');
+                    modalTitle.textContent = 'আপনার কার্ড শেয়ার করুন';
+                    modalTitle.style.textAlign = 'center';
+                    modalTitle.style.margin = '0 0 15px 0';
+                    modalContent.appendChild(modalTitle);
+                    
+                    // Create URL display
+                    const urlDisplay = document.createElement('div');
+                    urlDisplay.style.padding = '10px';
+                    urlDisplay.style.backgroundColor = '#f0f0f0';
+                    urlDisplay.style.borderRadius = '5px';
+                    urlDisplay.style.wordBreak = 'break-all';
+                    urlDisplay.style.fontSize = '14px';
+                    urlDisplay.textContent = shareableURL;
+                    modalContent.appendChild(urlDisplay);
+                    
+                    // Copy button
+                    const copyBtn = document.createElement('button');
+                    copyBtn.textContent = 'লিংক কপি করুন';
+                    copyBtn.style.padding = '10px 15px';
+                    copyBtn.style.backgroundColor = '#4CAF50';
+                    copyBtn.style.color = 'white';
+                    copyBtn.style.border = 'none';
+                    copyBtn.style.borderRadius = '5px';
+                    copyBtn.style.cursor = 'pointer';
+                    copyBtn.style.width = '100%';
+                    copyBtn.onclick = function() {
+                        // Create a temporary input for copying
+                        const tempInput = document.createElement('input');
+                        tempInput.value = shareableURL;
+                        document.body.appendChild(tempInput);
+                        tempInput.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(tempInput);
+                        
+                        copyBtn.textContent = 'কপি হয়েছে!';
+                        setTimeout(() => {
+                            copyBtn.textContent = 'লিংক কপি করুন';
+                        }, 2000);
+                    };
+                    modalContent.appendChild(copyBtn);
+                    
+                    // Create web share button (only for supported devices)
+                    if (navigator.share) {
+                        const webShareBtn = document.createElement('button');
+                        webShareBtn.textContent = 'ডিভাইস শেয়ার ব্যবহার করুন';
+                        webShareBtn.style.padding = '10px 15px';
+                        webShareBtn.style.backgroundColor = '#2196F3';
+                        webShareBtn.style.color = 'white';
+                        webShareBtn.style.border = 'none';
+                        webShareBtn.style.borderRadius = '5px';
+                        webShareBtn.style.cursor = 'pointer';
+                        webShareBtn.style.width = '100%';
+                        webShareBtn.onclick = function() {
+                            navigator.share({
+                                title: 'ঈদ মুবারক',
+                                text: 'আমার তৈরি করা ঈদ কার্ড দেখুন!',
+                                url: shareableURL
+                            }).catch(err => {
+                                console.log('Sharing failed', err);
+                            });
+                        };
+                        modalContent.appendChild(webShareBtn);
                     }
-                }, 'image/jpeg');
-            }).catch(error => {
+                    
+                    // Social sharing buttons
+                    const socialBtns = document.createElement('div');
+                    socialBtns.style.display = 'flex';
+                    socialBtns.style.justifyContent = 'space-between';
+                    socialBtns.style.gap = '10px';
+                    
+                    // Create Facebook share button
+                    const fbBtn = document.createElement('button');
+                    fbBtn.textContent = 'ফেসবুকে শেয়ার';
+                    fbBtn.style.flex = '1';
+                    fbBtn.style.padding = '10px 5px';
+                    fbBtn.style.backgroundColor = '#3b5998';
+                    fbBtn.style.color = 'white';
+                    fbBtn.style.border = 'none';
+                    fbBtn.style.borderRadius = '5px';
+                    fbBtn.style.cursor = 'pointer';
+                    fbBtn.onclick = function() {
+                        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareableURL)}`, '_blank');
+                    };
+                    socialBtns.appendChild(fbBtn);
+                    
+                    // Create WhatsApp share button
+                    const waBtn = document.createElement('button');
+                    waBtn.textContent = 'হোয়াটসঅ্যাপে শেয়ার';
+                    waBtn.style.flex = '1';
+                    waBtn.style.padding = '10px 5px';
+                    waBtn.style.backgroundColor = '#25D366';
+                    waBtn.style.color = 'white';
+                    waBtn.style.border = 'none';
+                    waBtn.style.borderRadius = '5px';
+                    waBtn.style.cursor = 'pointer';
+                    waBtn.onclick = function() {
+                        window.open(`https://wa.me/?text=${encodeURIComponent('ঈদ মুবারক! ' + shareableURL)}`, '_blank');
+                    };
+                    socialBtns.appendChild(waBtn);
+                    
+                    modalContent.appendChild(socialBtns);
+                    
+                    // Close button
+                    const closeBtn = document.createElement('button');
+                    closeBtn.textContent = 'বন্ধ করুন';
+                    closeBtn.style.padding = '10px 15px';
+                    closeBtn.style.backgroundColor = '#f44336';
+                    closeBtn.style.color = 'white';
+                    closeBtn.style.border = 'none';
+                    closeBtn.style.borderRadius = '5px';
+                    closeBtn.style.cursor = 'pointer';
+                    closeBtn.style.marginTop = '10px';
+                    closeBtn.style.width = '100%';
+                    closeBtn.onclick = function() {
+                        document.body.removeChild(shareModal);
+                    };
+                    modalContent.appendChild(closeBtn);
+                    
+                    // Add modal content to modal
+                    shareModal.appendChild(modalContent);
+                    
+                    // Add modal to body
+                    document.body.appendChild(shareModal);
+                    
+                    // Also close modal when clicking outside
+                    shareModal.addEventListener('click', function(e) {
+                        if (e.target === shareModal) {
+                            document.body.removeChild(shareModal);
+                        }
+                    });
+                } else {
+                    alert('ইমেজ আপলোড করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+                    console.error('Image upload error:', data);
+                }
+            })
+            .catch(error => {
                 // Remove the loading message
                 document.body.removeChild(loadingMessage);
                 
                 // Show error message
-                alert('দুঃখিত, শেয়ার করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
-                console.error('html2canvas error:', error);
+                alert('দুঃখিত, ইমেজ আপলোড করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+                console.error('Image upload error:', error);
             });
-        } else {
-            // Web Share API is not supported
-            alert('দুঃখিত, আপনার ব্রাউজারে শেয়ার ফিচার সমর্থিত নয়। অন্য উপায়ে চেষ্টা করুন।');
-        }
+        }, 'image/jpeg', 0.85);
+    }).catch(error => {
+        // Remove the loading message
+        document.body.removeChild(loadingMessage);
+        
+        // Show error message
+        alert('দুঃখিত, কার্ড ক্যাপচার করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+        console.error('html2canvas error:', error);
     });
+});
+
+// Modify the QR Code button functionality to generate and download a QR code of the image URL
+qrCodeBtn.addEventListener('click', function() {
+    if (!cardPreview) {
+        alert('কার্ড প্রিভিউ লোড করা যায়নি।');
+        console.error('Card preview element not found.');
+        return;
+    }
+
+    // Show loading message
+    const loadingMessage = document.createElement('div');
+    loadingMessage.textContent = 'QR কোড তৈরি করা হচ্ছে...';
+    loadingMessage.style.position = 'fixed';
+    loadingMessage.style.top = '50%';
+    loadingMessage.style.left = '50%';
+    loadingMessage.style.transform = 'translate(-50%, -50%)';
+    loadingMessage.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+    loadingMessage.style.color = 'white';
+    loadingMessage.style.padding = '15px 20px';
+    loadingMessage.style.borderRadius = '5px';
+    loadingMessage.style.zIndex = '1000';
+    document.body.appendChild(loadingMessage);
+
+    // Generate the card image
+    html2canvas(cardPreview, {
+        backgroundColor: null,
+        scale: 2,
+        logging: false,
+        allowTaint: true,
+        useCORS: true
+    }).then(canvas => {
+        // Convert canvas to blob
+        canvas.toBlob(function(blob) {
+            // Create a FormData object to send the image to the server
+            const formData = new FormData();
+            formData.append('image', blob, 'eid-mubarak-card.jpg');
+            
+            // Upload to ImgBB
+            fetch('https://api.imgbb.com/1/upload?key=ce97b288a4d204bbbb7b2f637eee72e2', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Get the shareable URL (direct display URL is better for sharing)
+                    const shareableURL = data.data.display_url || data.data.url;
+                    
+                    // Create a container for QR code (off-screen)
+                    const qrContainer = document.createElement('div');
+                    qrContainer.style.position = 'absolute';
+                    qrContainer.style.left = '-9999px';
+                    qrContainer.style.top = '-9999px';
+                    document.body.appendChild(qrContainer);
+                    
+                    // Generate QR code
+                    try {
+                        new QRCode(qrContainer, {
+                            text: shareableURL,
+                            width: 256,
+                            height: 256,
+                            colorDark: "#000000",
+                            colorLight: "#ffffff",
+                            correctLevel: QRCode.CorrectLevel.H
+                        });
+                        
+                        // Wait a bit for QR code to render
+                        setTimeout(() => {
+                            // Find the canvas in the QR code container
+                            const qrCanvas = qrContainer.querySelector('canvas');
+                            
+                            if (qrCanvas) {
+                                // Convert to downloadable image
+                                const qrImageURL = qrCanvas.toDataURL('image/png');
+                                
+                                // Create download link
+                                const downloadLink = document.createElement('a');
+                                downloadLink.href = qrImageURL;
+                                downloadLink.download = 'eid-mubarak-qr-code.png';
+                                document.body.appendChild(downloadLink);
+                                
+                                // Trigger download
+                                downloadLink.click();
+                                
+                                // Cleanup
+                                document.body.removeChild(downloadLink);
+                                document.body.removeChild(qrContainer);
+                                document.body.removeChild(loadingMessage);
+                                
+                                // Show success message
+                                const successMsg = document.createElement('div');
+                                successMsg.textContent = 'QR কোড ডাউনলোড হয়েছে!';
+                                successMsg.style.position = 'fixed';
+                                successMsg.style.top = '50%';
+                                successMsg.style.left = '50%';
+                                successMsg.style.transform = 'translate(-50%, -50%)';
+                                successMsg.style.backgroundColor = 'rgba(0, 128, 0, 0.8)';
+                                successMsg.style.color = 'white';
+                                successMsg.style.padding = '15px 20px';
+                                successMsg.style.borderRadius = '5px';
+                                successMsg.style.zIndex = '1000';
+                                document.body.appendChild(successMsg);
+                                
+                                // Remove success message after 2 seconds
+                                setTimeout(() => {
+                                    document.body.removeChild(successMsg);
+                                }, 2000);
+                            } else {
+                                throw new Error('QR canvas not found');
+                            }
+                        }, 500); // Give time for QR code to render
+                    } catch (qrError) {
+                        // Remove loading message
+                        document.body.removeChild(loadingMessage);
+                        if (qrContainer && document.body.contains(qrContainer)) {
+                            document.body.removeChild(qrContainer);
+                        }
+                        
+                        console.error('QR generation error:', qrError);
+                        alert('QR কোড তৈরি করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+                    }
+                } else {
+                    // Remove loading message
+                    document.body.removeChild(loadingMessage);
+                    console.error('Image upload error:', data);
+                    alert('ইমেজ আপলোড করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+                }
+            })
+            .catch(error => {
+                // Remove loading message
+                document.body.removeChild(loadingMessage);
+                console.error('Upload error:', error);
+                alert('ইমেজ আপলোড করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+            });
+        }, 'image/jpeg', 0.85);
+    }).catch(error => {
+        // Remove loading message
+        document.body.removeChild(loadingMessage);
+        console.error('html2canvas error:', error);
+        alert('কার্ড ক্যাপচার করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+    });
+});
 
     // ইউজার ইমেজ আপলোড হ্যান্ডেলিং
     userImageInput.addEventListener('change', function(e) {
@@ -297,73 +593,4 @@
         userImageContainer.style.borderColor = borderColorInput.value;
     }
     cardTitle.style.color = eidTextColorInput.value;
-});
-
-
-document.addEventListener('DOMContentLoaded', function () {
-    const qrCodeBtn = document.getElementById('qrCodeBtn');
-    const qrModal = document.getElementById('qrModal');
-    const closeQRBtn = document.getElementById('closeQRBtn');
-    const downloadQRBtn = document.getElementById('downloadQRBtn');
-    const qrcodeContainer = document.getElementById('qrcode');
-    const cardPreview = document.querySelector('.card-preview');
-
-    // QR কোড জেনারেট করার জন্য ইভেন্ট লিসেনার
-    qrCodeBtn.addEventListener('click', function () {
-        if (!cardPreview) {
-            alert('কার্ড প্রিভিউ লোড করা যায়নি।');
-            console.error('Card preview element not found.');
-            return;
-        }
-
-        // html2canvas ব্যবহার করে কার্ডের ইমেজ তৈরি করুন
-        html2canvas(cardPreview, {
-            backgroundColor: null,
-            scale: 2,
-            logging: false,
-            allowTaint: true,
-            useCORS: true
-        }).then(canvas => {
-            // কার্ডের ইমেজ URL তৈরি করুন
-            const cardImageURL = canvas.toDataURL('image/png');
-
-            // QR কোড জেনারেট করুন
-            if (!qrcodeContainer) {
-                alert('QR কোড কন্টেইনার পাওয়া যায়নি।');
-                console.error('QR code container element not found.');
-                return;
-            }
-
-            qrcodeContainer.innerHTML = ''; // আগের QR কোড মুছে ফেলুন
-            new QRCode(qrcodeContainer, {
-                text: cardImageURL,
-                width: 200,
-                height: 200
-            });
-
-            // QR কোড মডাল দেখান
-            qrModal.style.display = 'flex';
-        }).catch(error => {
-            alert('QR কোড জেনারেট করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
-            console.error('QR Code Error:', error);
-        });
-    });
-
-    // QR কোড মডাল বন্ধ করার জন্য ইভেন্ট লিসেনার
-    closeQRBtn.addEventListener('click', function () {
-        qrModal.style.display = 'none';
-    });
-
-    // QR কোড ডাউনলোড করার জন্য ইভেন্ট লিসেনার
-    downloadQRBtn.addEventListener('click', function () {
-        const qrCanvas = qrcodeContainer.querySelector('canvas');
-        if (qrCanvas) {
-            const link = document.createElement('a');
-            link.href = qrCanvas.toDataURL('image/png');
-            link.download = 'eid-mubarak-qr-code.png';
-            link.click();
-        } else {
-            alert('QR কোড ডাউনলোড করতে সমস্যা হয়েছে।');
-        }
-    });
 });

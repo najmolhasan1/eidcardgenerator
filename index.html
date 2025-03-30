@@ -23,93 +23,90 @@
         </div>
         
         <div class="content">
-          <div class="preview">
-              <h2>প্রিভিউ</h2>
-              <div class="card-preview template1">
-                  <div class="card-badge">
-                      <i class="fas fa-moon"></i>
-                  </div>
-                  <div class="card-moon">
-                      <!-- <i class="fas fa-moon"></i> -->
-                  </div>
-                  <h2 class="card-title">ঈদ মোবারক</h2>
-                  <div class="card-illustration">
-                      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-                          <circle cx="100" cy="100" r="80" fill="#4CAF50" opacity="0.2"/>
-                          <circle cx="100" cy="100" r="60" fill="#4CAF50" opacity="0.4"/>
-                          <circle cx="100" cy="100" r="40" fill="#4CAF50" opacity="0.6"/>
-                          <path d="M100,60 L100,140 M60,100 L140,100" stroke="white" stroke-width="5"/>
-                      </svg>
-                  </div>
-                  <div class="card-message">এখানে আপনার মেসেজ লিখুন</div>
-                  <div class="card-name">- আপনার নাম</div>
-              </div>
-              
-              <div class="buttons">
-                  <button id="downloadBtn" class="btn btn-primary">
-                      <i class="fas fa-download"></i> ডাউনলোড করুন
-                  </button>
-                  <button id="shareBtn" class="btn btn-secondary">
-                      <i class="fas fa-share-alt"></i> শেয়ার করুন
-                  </button>
-                  <button id="qrCodeBtn" class="btn btn-dark">
-                    <i class="fas fa-qrcode"></i> QR কোড
-                </button>
-                  <div class="social-share-buttons" style="display: none; margin-top: 10px;">
-                    <button class="btn btn-primary social-btn" data-platform="facebook">
-                        <i class="fab fa-facebook-f"></i> ফেসবুক
+            <div class="preview">
+                <h2>প্রিভিউ</h2>
+                <div class="card-preview template1">
+                    <div class="card-badge">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                    <div class="card-moon">
+                        <!-- <i class="fas fa-moon"></i> -->
+                    </div>
+                    <h2 class="card-title">ঈদ মোবারক</h2>
+                    <div class="card-illustration">
+                        <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="100" cy="100" r="80" fill="#4CAF50" opacity="0.2"/>
+                            <circle cx="100" cy="100" r="60" fill="#4CAF50" opacity="0.4"/>
+                            <circle cx="100" cy="100" r="40" fill="#4CAF50" opacity="0.6"/>
+                            <path d="M100,60 L100,140 M60,100 L140,100" stroke="white" stroke-width="5"/>
+                        </svg>
+                    </div>
+                    <div class="card-message">এখানে আপনার মেসেজ লিখুন</div>
+                    <div class="card-name">- আপনার নাম</div>
+                </div>
+                
+                <div class="buttons">
+                    <button id="downloadBtn" class="btn btn-primary">
+                        <i class="fas fa-download"></i> ডাউনলোড করুন
                     </button>
-                    <button class="btn btn-info social-btn" data-platform="twitter">
-                        <i class="fab fa-twitter"></i> টুইটার
+                    <button id="shareBtn" class="btn btn-secondary">
+                        <i class="fas fa-share-alt"></i> শেয়ার করুন
                     </button>
-                    <button class="btn btn-danger social-btn" data-platform="instagram">
-                        <i class="fab fa-instagram"></i> ইনস্টাগ্রাম
-                    </button>
-                    <button class="btn btn-success social-btn" data-platform="whatsapp">
-                        <i class="fab fa-whatsapp"></i> হোয়াটসঅ্যাপ
-                    </button>
-  
                     <button id="qrCodeBtn" class="btn btn-dark">
                       <i class="fas fa-qrcode"></i> QR কোড
                   </button>
-
-                  <!-- QR Code Modal -->
-<div id="qrModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center;">
-  <div style="background-color: white; padding: 20px; border-radius: 10px; max-width: 90%; text-align: center;">
-      <h3 style="margin-bottom: 15px;">আপনার ঈদ কার্ডের QR কোড</h3>
-      <p style="margin-bottom: 10px;">এই QR কোড স্ক্যান করে যে কেউ আপনার কার্ড দেখতে পারবে</p>
-      <div id="qrcode" style="margin: 0 auto;"></div>
-      <div style="margin-top: 20px;">
-          <button id="downloadQRBtn" class="btn btn-primary">
-              <i class="fas fa-download"></i> QR কোড ডাউনলোড করুন
-          </button>
-          <button id="closeQRBtn" class="btn btn-secondary" style="margin-left: 10px;">
-              <i class="fas fa-times"></i> বন্ধ করুন
-          </button>
-      </div>
+                    <div class="social-share-buttons" style="display: none; margin-top: 10px;">
+                      <button class="btn btn-primary social-btn" data-platform="facebook">
+                          <i class="fab fa-facebook-f"></i> ফেসবুক
+                      </button>
+                      <button class="btn btn-info social-btn" data-platform="twitter">
+                          <i class="fab fa-twitter"></i> টুইটার
+                      </button>
+                      <button class="btn btn-danger social-btn" data-platform="instagram">
+                          <i class="fab fa-instagram"></i> ইনস্টাগ্রাম
+                      </button>
+                      <button class="btn btn-success social-btn" data-platform="whatsapp">
+                          <i class="fab fa-whatsapp"></i> হোয়াটসঅ্যাপ
+                      </button>
+    
+  
+                    <!-- QR Code Modal -->
+  <div id="qrModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center;">
+    <div style="background-color: white; padding: 20px; border-radius: 10px; max-width: 90%; text-align: center;">
+        <h3 style="margin-bottom: 15px;">আপনার ঈদ কার্ডের QR কোড</h3>
+        <p style="margin-bottom: 10px;">এই QR কোড স্ক্যান করে যে কেউ আপনার কার্ড দেখতে পারবে</p>
+        <div id="qrcode" style="margin: 0 auto;"></div>
+        <div style="margin-top: 20px;">
+            <button id="downloadQRBtn" class="btn btn-primary">
+                <i class="fas fa-download"></i> QR কোড ডাউনলোড করুন
+            </button>
+            <button id="closeQRBtn" class="btn btn-secondary" style="margin-left: 10px;">
+                <i class="fas fa-times"></i> বন্ধ করুন
+            </button>
+        </div>
+    </div>
   </div>
-</div>
-                  
-                  <!-- QR Code Modal -->
-                  <div id="qrModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center;">
-                      <div style="background-color: white; padding: 20px; border-radius: 10px; max-width: 90%; text-align: center;">
-                          <h3 style="margin-bottom: 15px;">আপনার ঈদ কার্ডের QR কোড</h3>
-                          <p style="margin-bottom: 10px;">এই QR কোড স্ক্যান করে যে কেউ আপনার কার্ড দেখতে পারবে</p>
-                          <div id="qrcode" style="margin: 0 auto;"></div>
-                          <div style="margin-top: 20px;">
-                              <button id="downloadQRBtn" class="btn btn-primary">
-                                  <i class="fas fa-download"></i> QR কোড ডাউনলোড করুন
-                              </button>
-                              <button id="closeQRBtn" class="btn btn-secondary" style="margin-left: 10px;">
-                                  <i class="fas fa-times"></i> বন্ধ করুন
-                              </button>
-                          </div>
-                      </div>
+                    
+                    <!-- QR Code Modal -->
+                    <div id="qrModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center;">
+                        <div style="background-color: white; padding: 20px; border-radius: 10px; max-width: 90%; text-align: center;">
+                            <h3 style="margin-bottom: 15px;">আপনার ঈদ কার্ডের QR কোড</h3>
+                            <p style="margin-bottom: 10px;">এই QR কোড স্ক্যান করে যে কেউ আপনার কার্ড দেখতে পারবে</p>
+                            <div id="qrcode" style="margin: 0 auto;"></div>
+                            <div style="margin-top: 20px;">
+                                <button id="downloadQRBtn" class="btn btn-primary">
+                                    <i class="fas fa-download"></i> QR কোড ডাউনলোড করুন
+                                </button>
+                                <button id="closeQRBtn" class="btn btn-secondary" style="margin-left: 10px;">
+                                    <i class="fas fa-times"></i> বন্ধ করুন
+                                </button>
+                            </div>
+                        </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-          </div>
-            
+            </div>
+              
             <div class="controls">
                 <div class="control-section">
                     <h3>টেমপ্লেট বেছে নিন</h3>
@@ -131,7 +128,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                      <label for="eidTextColor">ঈদ মোবারক লেখার রং:</label>
+                      <label for="eidTextColor">ঈদ মোবারক লেখার কালার:</label>
                       <input type="color" id="eidTextColor" value="#4CAF50">
                   </div>
                 </div>

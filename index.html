@@ -526,9 +526,6 @@
     align-items: center;
     justify-content: center;
     border: 3px solid #FFD700;
-    background-size: cover; /* Ensures the image covers the container */
-    background-position: center; /* Centers the image */
-    background-repeat: no-repeat; /* Prevents tiling */
 
 }
 
@@ -536,8 +533,6 @@
             width: 100%;
              height: 100%; 
              object-fit: cover;
-             background-position: center;
-              background-size: cover;
 
  
         }
@@ -949,38 +944,42 @@
     });
 
     // ইউজার ইমেজ আপলোড হ্যান্ডেলিং
-    userImageInput.addEventListener('change', function (e) {
+    userImageInput.addEventListener('change', function(e) {
     if (e.target.files && e.target.files[0]) {
         const reader = new FileReader();
-
-        reader.onload = function (e) {
-            // Create the user image container if it doesn't exist
+        
+        reader.onload = function(e) {
+            // ইউজার ইমেজ এলিমেন্ট তৈরি করুন যদি নেই
             if (!userImageContainer) {
                 userImageContainer = document.createElement('div');
                 userImageContainer.className = 'user-image-container';
-
-                // Add the container to the card preview
+                
+                userImageElement = document.createElement('img');
+                userImageContainer.appendChild(userImageElement);
+                
+                // যদি ইলাস্ট্রেশন এলিমেন্ট থাকে, তাহলে তার পরে ইমেজ কন্টেইনার যোগ করুন
                 if (cardIllustration) {
                     cardIllustration.after(userImageContainer);
                 } else {
+                    // না থাকলে টাইটেলের পরে যোগ করুন
                     const cardTitle = cardPreview.querySelector('.card-title');
                     cardTitle.after(userImageContainer);
                 }
             }
-
-            // Set the background image of the container
-            userImageContainer.style.backgroundImage = `url(${e.target.result})`;
-
-            // Automatically check the checkbox and show the image
+            
+            // ইমেজ সোর্স সেট করুন
+            userImageElement.src = e.target.result;
+            
+            // চেকবক্স অটোমেটিক চেক করুন এবং ইমেজ দেখান
             useUserImageCheckbox.checked = true;
             userImageContainer.style.display = 'flex';
-
-            // Hide the illustration
+            
+            // ইলাস্ট্রেশন লুকান
             if (cardIllustration) {
                 cardIllustration.style.display = 'none';
             }
         };
-
+        
         reader.readAsDataURL(e.target.files[0]);
     }
 });

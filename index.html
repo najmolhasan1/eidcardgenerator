@@ -515,14 +515,30 @@
             font-size: 0.8rem;
         }
 
-        .user-image-container {
-            width: 120px;
-            height: 120px;
-        }
+  
+          .user-image-container {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #FFD700;
+    background-size: cover; /* Ensures the image covers the container */
+    background-position: center; /* Centers the image */
+    background-repeat: no-repeat; /* Prevents tiling */
+
+}
 
         .user-image-container img {
             width: 100%;
-            /* height: 100%; */
+             height: 100%; 
+             object-fit: cover;
+             background-position: center;
+              background-size: cover;
+
  
         }
         input[type="color"] {
@@ -933,42 +949,38 @@
     });
 
     // ইউজার ইমেজ আপলোড হ্যান্ডেলিং
-    userImageInput.addEventListener('change', function(e) {
+    userImageInput.addEventListener('change', function (e) {
     if (e.target.files && e.target.files[0]) {
         const reader = new FileReader();
-        
-        reader.onload = function(e) {
-            // ইউজার ইমেজ এলিমেন্ট তৈরি করুন যদি নেই
+
+        reader.onload = function (e) {
+            // Create the user image container if it doesn't exist
             if (!userImageContainer) {
                 userImageContainer = document.createElement('div');
                 userImageContainer.className = 'user-image-container';
-                
-                userImageElement = document.createElement('img');
-                userImageContainer.appendChild(userImageElement);
-                
-                // যদি ইলাস্ট্রেশন এলিমেন্ট থাকে, তাহলে তার পরে ইমেজ কন্টেইনার যোগ করুন
+
+                // Add the container to the card preview
                 if (cardIllustration) {
                     cardIllustration.after(userImageContainer);
                 } else {
-                    // না থাকলে টাইটেলের পরে যোগ করুন
                     const cardTitle = cardPreview.querySelector('.card-title');
                     cardTitle.after(userImageContainer);
                 }
             }
-            
-            // ইমেজ সোর্স সেট করুন
-            userImageElement.src = e.target.result;
-            
-            // চেকবক্স অটোমেটিক চেক করুন এবং ইমেজ দেখান
+
+            // Set the background image of the container
+            userImageContainer.style.backgroundImage = `url(${e.target.result})`;
+
+            // Automatically check the checkbox and show the image
             useUserImageCheckbox.checked = true;
             userImageContainer.style.display = 'flex';
-            
-            // ইলাস্ট্রেশন লুকান
+
+            // Hide the illustration
             if (cardIllustration) {
                 cardIllustration.style.display = 'none';
             }
         };
-        
+
         reader.readAsDataURL(e.target.files[0]);
     }
 });

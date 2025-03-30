@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="bn">
+<>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ঈদ কার্ড জেনারেটর</title>
+    <link rel="shortcut icon" href="./images/Favicon2.png" type="image/x-icon">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Hind Siliguri', sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-width: 1200px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background-color: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+        }
+        
+        .crescent {
+            position: absolute;
+            right: 50px;
+            top: 20px;
+            font-size: 2.5rem;
+            color: #FFD700;
+        }
+        
+        .content {
+            display: flex;
+            flex-direction: row;
+            padding: 20px;
+        }
+
+        /* CSS স্টাইল সেকশনে যোগ করুন */
+.user-image-container {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 3px solid #FFD700;
+}
+
+.user-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    input[type="color"] {
+        height: 30px; /* Adjust the height as needed */
+        width: 50px; /* Optional: Adjust the width to match the height */
+        border: none;
+        padding: 0px;
+        margin-left: 5px; /* Optional: Add some space between the label and the color input */
+        border-radius: 5px; /* Optional: Add rounded corners */
+        margin-top: 7px;
+        cursor: pointer;
+    }
+}
+        
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+        }
+        
+        .preview {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .card-preview {
+            width: 100%;
+            max-width: 420px;
+            aspect-ratio: 1/1.4;
+            background-color: #f9f4e8;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .card-title {
+            font-size: 2rem;
+            text-align: center;
+            margin-top: 20px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+        
+        .card-message {
+            margin-top: 20px;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.2rem;
+            flex-grow: 1;
+        }
+        
+        .card-name {
+            margin-top: 10px;
+            font-size: 1.3rem;
+            text-align: right;
+            width: 100%;
+            padding-right: 20px;
+        }
+        
+        .controls {
+            flex: 1;
+            padding: 20px;
+        }
+        
+        .control-section {
+            margin-bottom: 30px;
+        }
+        
+        .control-section h3 {
+            margin-bottom: 15px;
+            color: #4CAF50;
+            border-bottom: 2px solid #4CAF50;
+            padding-bottom: 5px;
+        }
+        
+        .templates {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+        }
+        
+        .template {
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .template:hover, .template.active {
+            border-color: #4CAF50;
+            transform: scale(1.05);
+        }
+        
+        .template img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: inline-block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+     .form-group label {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 5px;
+    font-weight: 500;
+    margin-top: 10px;
+}
+
+.form-group input[type="checkbox"] {
+    margin-right: 5px;
+    width: 20px;
+    
+}
+        
+        .form-group textarea, .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+        
+        .form-group textarea {
+            height: 100px;
+            resize: vertical;
+        }
+        
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: #2196F3;
+            color: white;
+        }
+        
+        .btn-dark {
+            background-color: #333;
+            color: white;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f0f0f0;
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .social-share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+}
+
+.social-btn {
+    flex: 1;
+    min-width: 120px;
+}
+
+.btn-info {
+    background-color: #1DA1F2;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #E1306C;
+    color: white;
+}
+
+.btn-success {
+    background-color: #25D366;
+    color: white;
+}
+        
+        /* Card Template Styles */
+        .template1 {
+            background-color: #f9f4e8;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Cpath fill='%23c9b18c' fill-opacity='0.1' d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z'%3E%3C/path%3E%3C/svg%3E");
+        }
+        
+        .template2 {
+            background-color: #05004e;
+            color: white;
+            /* background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239C92AC' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); */
+            background-image: url(images/Template10-01.png);
+            width: 100%;
+            object-fit: contain;
+            background-size: cover;
+          }
+        
+        .template2 .card-title {
+            color: #FFD700;
+        }
+        
+        .template3 {
+            background-color: #330033;
+            color: white;
+            /* background-image: url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M50 50c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10s-10-4.477-10-10 4.477-10 10-10zM10 10c0-5.523 4.477-10 10-10s10 4.477 10 10-4.477 10-10 10c0 5.523-4.477 10-10 10S0 25.523 0 20s4.477-10 10-10zm10 8c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8zm40 40c4.418 0 8-3.582 8-8s-3.582-8-8-8-8 3.582-8 8 3.582 8 8 8z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); */
+            background-image: url(images/Template9-01-01.png);
+            width: 100%;
+            object-fit: contain;
+            background-size: cover;
+          }
+        
+        .template3 .card-title {
+            color: #FFD700;
+        }
+        
+        .template4 {
+            background-color: #000000;
+            color: white;
+            /* background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='18' viewBox='0 0 100 18'%3E%3Cpath fill='%23333333' fill-opacity='0.4' d='M61.82 18c3.47-1.45 6.86-3.78 11.3-7.34C78 6.76 80.34 5.1 83.87 3.42 88.56 1.16 93.75 0 100 0v6.16C98.76 6.05 97.43 6 96 6c-9.59 0-14.23 2.23-23.13 9.34-1.28 1.03-2.39 1.9-3.4 2.66h-7.65zm-23.64 0H22.52c-1-.76-2.1-1.63-3.4-2.66C11.57 9.3 7.08 6.78 0 6.16V0c6.25 0 11.44 1.16 16.14 3.42 3.53 1.7 5.87 3.35 10.73 7.24 4.45 3.56 7.84 5.9 11.31 7.34zM61.82 0h7.66a39.57 39.57 0 0 1-7.34 4.58C57.44 6.84 52.25 8 46 8S34.56 6.84 29.86 4.58A39.57 39.57 0 0 1 22.52 0h15.66C41.65 1.44 45.21 2 50 2c4.8 0 8.35-.56 11.82-2z'%3E%3C/path%3E%3C/svg%3E"); */
+            background-image: url(images/Template7-01.png);
+            width: 100%;
+            object-fit: contain;
+            background-size: cover;
+        }
+        
+        .template4 .card-title {
+            color: #FFD700;
+        }
+        
+        .template5 {
+            background-color: #ffffff;
+            color: #333;
+            /* background-image: url("data:image/svg+xml,%3Csvg width='52' height='26' viewBox='0 0 52 26' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffb400' fill-opacity='0.2'%3E%3Cpath d='M10 10c0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6h2c0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4 3.314 0 6 2.686 6 6 0 2.21 1.79 4 4 4v2c-3.314 0-6-2.686-6-6 0-2.21-1.79-4-4-4-3.314 0-6-2.686-6-6zm25.464-1.95l8.486 8.486-1.414 1.414-8.486-8.486 1.414-1.414z' /%3E%3C/g%3E%3C/g%3E%3C/svg%3E"); */
+            background-image: url(/images/Template6-01.png);
+            width: 100%;
+            object-fit: contain;
+            background-size: cover;
+        }
+        
+        .template5 .card-title {
+            color: #FF9800;
+        }
+        
+        .card-badge {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 10px;
+            background-color: rgba(255, 215, 0, 0.7);
+            border-radius: 0 0 0 10px;
+        }
+        
+        .card-moon {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #FFD700;
+            margin: 10px 0;
+            margin-bottom: 100px;
+        }
+        
+        .card-illustration {
+            text-align: center;
+            margin: 5px 0;
+        }
+        
+        .card-illustration svg {
+            width: 110px;
+            height: 110px;
+        }
+
+        .card-illustration circle {
+            fill: #4CAF50;
+        }
+
+        input[type="color"] {
+        height: 30px; /* Adjust the height as needed */
+        width: 50px; /* Optional: Adjust the width to match the height */
+        border: none;
+        padding: 0px;
+        margin-left: 5px; /* Optional: Add some space between the label and the color input */
+        border-radius: 5px; /* Optional: Add rounded corners */
+        margin-top: 7px;
+        cursor: pointer;
+    }
+
+    @media (max-width: 480px) {
+        body {
+            padding: 10px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: none;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+        }
+
+        .header p {
+            font-size: 1rem;
+        }
+
+        .crescent {
+            right: 30px;
+            top: 15px;
+            font-size: 2rem;
+        }
+
+        .content {
+            flex-direction: column;
+            padding: 10px;
+        }
+
+        .preview {
+            width: 100%;
+            padding: 10px;
+        }
+
+        .card-preview {
+            max-width: 100%;
+            padding: 15px;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            text-align: center;
+            margin-top: 0px;
+            color: #4CAF50;
+            font-weight: bold;
+        }
+
+        .card-message {
+            font-size: 1rem;
+        }
+
+        .card-name {
+            font-size: 1rem;
+            padding-right: 10px;
+        }
+
+        .controls {
+            width: 100%;
+            padding: 10px;
+        }
+
+        .control-section h3 {
+            font-size: 1.2rem;
+        }
+
+        .templates {
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 5px;
+        }
+
+        .template img {
+            height: auto;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+        }
+
+        .form-group textarea, .form-group input {
+            font-size: 0.9rem;
+            padding: 8px;
+        }
+
+        .buttons {
+            flex-direction: row;
+            gap: 10px;
+        }
+
+        .btn {
+            font-size: 0.8rem;
+            padding: 10px;
+        }
+
+        .social-share-buttons {
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .footer {
+            font-size: 0.8rem;
+        }
+
+        .user-image-container {
+            width: 120px;
+            height: 120px;
+        }
+
+        .user-image-container img {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            object-fit: cover;
+        }
+        input[type="color"] {
+        height: 30px; /* Adjust the height as needed */
+        width: 50px; /* Optional: Adjust the width to match the height */
+        border: none;
+        padding: 0px;
+        margin-left: 5px; /* Optional: Add some space between the label and the color input */
+        border-radius: 5px; /* Optional: Add rounded corners */
+        margin-top: 7px;
+        cursor: pointer;
+    }
+    }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ঈদ কার্ড জেনারেটর</h1>
+            <p>আপনার প্রিয়জনদের জন্য একটি সুন্দর ঈদ শুভেচ্ছা কার্ড তৈরি করুন</p>
+            <div class="crescent">
+                <i class="fas fa-moon"></i>
+            </div>
+        </div>
+        
+        <div class="content">
+          <div class="preview">
+              <h2>প্রিভিউ</h2>
+              <div class="card-preview template1">
+                  <div class="card-badge">
+                      <i class="fas fa-moon"></i>
+                  </div>
+                  <div class="card-moon">
+                      <!-- <i class="fas fa-moon"></i> -->
+                  </div>
+                  <h2 class="card-title">ঈদ মোবারক</h2>
+                  <div class="card-illustration">
+                      <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                          <circle cx="100" cy="100" r="80" fill="#4CAF50" opacity="0.2"/>
+                          <circle cx="100" cy="100" r="60" fill="#4CAF50" opacity="0.4"/>
+                          <circle cx="100" cy="100" r="40" fill="#4CAF50" opacity="0.6"/>
+                          <path d="M100,60 L100,140 M60,100 L140,100" stroke="white" stroke-width="5"/>
+                      </svg>
+                  </div>
+                  <div class="card-message">এখানে আপনার মেসেজ লিখুন</div>
+                  <div class="card-name">- আপনার নাম</div>
+              </div>
+              
+              <div class="buttons">
+                  <button id="downloadBtn" class="btn btn-primary">
+                      <i class="fas fa-download"></i> ডাউনলোড করুন
+                  </button>
+                  <button id="shareBtn" class="btn btn-secondary">
+                      <i class="fas fa-share-alt"></i> শেয়ার করুন
+                  </button>
+                  <button id="qrCodeBtn" class="btn btn-dark">
+                    <i class="fas fa-qrcode"></i> QR কোড
+                </button>
+                  <div class="social-share-buttons" style="display: none; margin-top: 10px;">
+                    <button class="btn btn-primary social-btn" data-platform="facebook">
+                        <i class="fab fa-facebook-f"></i> ফেসবুক
+                    </button>
+                    <button class="btn btn-info social-btn" data-platform="twitter">
+                        <i class="fab fa-twitter"></i> টুইটার
+                    </button>
+                    <button class="btn btn-danger social-btn" data-platform="instagram">
+                        <i class="fab fa-instagram"></i> ইনস্টাগ্রাম
+                    </button>
+                    <button class="btn btn-success social-btn" data-platform="whatsapp">
+                        <i class="fab fa-whatsapp"></i> হোয়াটসঅ্যাপ
+                    </button>
+  
+                    <button id="qrCodeBtn" class="btn btn-dark">
+                      <i class="fas fa-qrcode"></i> QR কোড
+                  </button>
+
+                  <!-- QR Code Modal -->
+<div id="qrModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center;">
+  <div style="background-color: white; padding: 20px; border-radius: 10px; max-width: 90%; text-align: center;">
+      <h3 style="margin-bottom: 15px;">আপনার ঈদ কার্ডের QR কোড</h3>
+      <p style="margin-bottom: 10px;">এই QR কোড স্ক্যান করে যে কেউ আপনার কার্ড দেখতে পারবে</p>
+      <div id="qrcode" style="margin: 0 auto;"></div>
+      <div style="margin-top: 20px;">
+          <button id="downloadQRBtn" class="btn btn-primary">
+              <i class="fas fa-download"></i> QR কোড ডাউনলোড করুন
+          </button>
+          <button id="closeQRBtn" class="btn btn-secondary" style="margin-left: 10px;">
+              <i class="fas fa-times"></i> বন্ধ করুন
+          </button>
+      </div>
+  </div>
+</div>
+                  
+                  <!-- QR Code Modal -->
+                  <div id="qrModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.7); z-index: 1000; display: flex; align-items: center; justify-content: center;">
+                      <div style="background-color: white; padding: 20px; border-radius: 10px; max-width: 90%; text-align: center;">
+                          <h3 style="margin-bottom: 15px;">আপনার ঈদ কার্ডের QR কোড</h3>
+                          <p style="margin-bottom: 10px;">এই QR কোড স্ক্যান করে যে কেউ আপনার কার্ড দেখতে পারবে</p>
+                          <div id="qrcode" style="margin: 0 auto;"></div>
+                          <div style="margin-top: 20px;">
+                              <button id="downloadQRBtn" class="btn btn-primary">
+                                  <i class="fas fa-download"></i> QR কোড ডাউনলোড করুন
+                              </button>
+                              <button id="closeQRBtn" class="btn btn-secondary" style="margin-left: 10px;">
+                                  <i class="fas fa-times"></i> বন্ধ করুন
+                              </button>
+                          </div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+          </div>
+            
+            <div class="controls">
+                <div class="control-section">
+                    <h3>টেমপ্লেট বেছে নিন</h3>
+                    <div class="templates">
+                        <div class="template active" data-template="template1">
+                            <img src="/images/Template5-01.png" alt="টেমপ্লেট ১" />
+                        </div>
+                        <div class="template" data-template="template2">
+                            <img src="/images/Template10-01.png" alt="টেমপ্লেট ২" />
+                        </div>
+                        <div class="template" data-template="template3">
+                            <img src="/images/Template9-01-01.png" alt="টেমপ্লেট ৩" />
+                        </div>
+                        <div class="template" data-template="template4">
+                            <img src="/images/Template8-01.png" alt="টেমপ্লেট ৪" />
+                        </div>
+                        <div class="template" data-template="template5">
+                            <img src="/images/Template6-01.png" alt="টেমপ্লেট ৫" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="eidTextColor">ঈদ মোবারক লেখার রং:</label>
+                      <input type="color" id="eidTextColor" value="#4CAF50">
+                  </div>
+                </div>
+                
+                <div class="control-section">
+                    <h3>আপনার বার্তা লিখুন</h3>
+                    <div class="form-group">
+                        <label for="message">বার্তা:</label>
+                        <textarea id="message" placeholder="আপনার ঈদ শুভেচ্ছা বার্তা লিখুন...">আপনাকে ও আপনার পরিবারকে জানাই ঈদের শুভেচ্ছা। আল্লাহ আপনাদের সবার জীবনে শান্তি ও সমৃদ্ধি বয়ে আনুক।</textarea>
+                        <label for="messageColor">বার্তার রং:</label>
+                        <input type="color" id="messageColor" value="#000000">
+                      </div>
+                </div>
+                
+                <div class="control-section">
+                    <h3>আপনার তথ্য</h3>
+                    <div class="form-group">
+                        <label for="name">আপনার নাম:</label>
+                        <input type="text" id="name" placeholder="আপনার নাম লিখুন" value="আবদুল করিম">
+                        <label for="nameColor">নামের রং:</label>
+                        <input type="color" id="nameColor" value="#000000">
+                    </div>
+                </div>
+
+                <!-- কন্ট্রোল সেকশনে এই কোডটি যোগ করুন (অতিরিক্ত বিকল্প সেকশনের আগে) -->
+<div class="control-section">
+  <h3>নিজের ছবি যোগ করুন</h3>
+  <div class="form-group">
+      <label for="userImage">ছবি আপলোড করুন:</label>
+      <input type="file" id="userImage" accept="image/*">
+      <label for="borderColor">ছবির বর্ডার রং:</label>
+      <input type="color" id="borderColor" value="#FFD700">
+  </div>
+  <div class="form-group">
+      <label>
+          <input type="checkbox" id="useUserImage">
+          আপলোড করা ছবি ব্যবহার করুন
+      </label>
+  </div>
+</div>
+                
+ <!-- 1. "অতিরিক্ত বিকল্প" সেকশনের আগে (ইউজার ইমেজ সেকশনের পরে) এই নতুন সেকশন যোগ করুন -->
+ <!-- <div class="control-section">
+  <h3>রং পরিবর্তন</h3>
+  <div class="form-group">
+      <label for="messageColor">বার্তার রং:</label>
+      <input type="color" id="messageColor" value="#000000">
+  </div>
+  <div class="form-group">
+      <label for="nameColor">নামের রং:</label>
+      <input type="color" id="nameColor" value="#000000">
+  </div>
+  <div class="form-group">
+      <label for="borderColor">ছবির বর্ডার রং:</label>
+      <input type="color" id="borderColor" value="#FFD700">
+  </div>
+  <div class="form-group">
+      <label for="eidTextColor">ঈদ মোবারক লেখার রং:</label>
+      <input type="color" id="eidTextColor" value="#4CAF50">
+  </div>
+</div> -->
+
+<!-- 2. JavaScript কোড - document.addEventListener('DOMContentLoaded', function() {...} 
+   ব্লকের ভিতরে, মূল ভেরিয়েবল ডিক্লেয়ারেশনের পরে যোগ করুন -->
+
+<!-- // 3. ইনিশিয়ালাইজেশন কোড - স্ক্রিপ্টের শেষে "// Initialize with default values" কমেন্টের নিচে যোগ করুন? -->
+                <!-- <div class="control-section">
+                    <h3>অতিরিক্ত বিকল্প</h3>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="showMoon" checked>
+                            চাঁদ দেখান
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="showIllustration" checked>
+                            ইলাস্ট্রেশন দেখান
+                        </label>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© ২০২৫ ঈদ কার্ড জেনারেটর। সর্বসত্ত্ব সংরক্ষিত।</p>
+        </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+    const cardPreview = document.querySelector('.card-preview');
+    const cardMessage = document.querySelector('.card-message');
+    const cardName = document.querySelector('.card-name');
+    const messageInput = document.getElementById('message');
+    const nameInput = document.getElementById('name');
+    const templates = document.querySelectorAll('.template');
+    const showMoonCheckbox = document.getElementById('showMoon');
+    const showIllustrationCheckbox = document.getElementById('showIllustration');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const shareBtn = document.getElementById('shareBtn');
+    const cardMoon = document.querySelector('.card-moon');
+    const cardIllustration = document.querySelector('.card-illustration');
+
+    // document.addEventListener('DOMContentLoaded', function() {...} ব্লকের ভিতরে
+// সকল ভেরিয়েবল ডিক্লেয়ারেশনের পরে এই কোড যোগ করুন:
+
+    // কালার পরিবর্তন ফিচার
+    const messageColorInput = document.getElementById('messageColor');
+    const nameColorInput = document.getElementById('nameColor');
+    const borderColorInput = document.getElementById('borderColor');
+    const eidTextColorInput = document.getElementById('eidTextColor');
+    const cardTitle = document.querySelector('.card-title'); // ঈদ মোবারক টাইটেল
+
+    // বার্তার কালার পরিবর্তন
+    messageColorInput.addEventListener('input', function() {
+        cardMessage.style.color = this.value;
+    });
+
+    // নামের কালার পরিবর্তন
+    nameColorInput.addEventListener('input', function() {
+        cardName.style.color = this.value;
+    });
+
+    // প্রোফাইল ইমেজের বর্ডার কালার পরিবর্তন
+    borderColorInput.addEventListener('input', function() {
+        if (userImageContainer) {
+            userImageContainer.style.borderColor = this.value;
+        }
+    });
+
+    // ঈদ মোবারক লেখার কালার পরিবর্তন
+    eidTextColorInput.addEventListener('input', function() {
+        cardTitle.style.color = this.value;
+    });
+
+
+    // নতুন এলিমেন্টস
+    const userImageInput = document.getElementById('userImage');
+    const useUserImageCheckbox = document.getElementById('useUserImage');
+    let userImageContainer = null;
+    let userImageElement = null;
+
+    // Download functionality using html2canvas
+    downloadBtn.addEventListener('click', function() {
+        // Show a loading message
+        const loadingMessage = document.createElement('div');
+        loadingMessage.textContent = 'আপনার কার্ড ডাউনলোড হচ্ছে...';
+        loadingMessage.style.position = 'fixed';
+        loadingMessage.style.top = '50%';
+        loadingMessage.style.left = '50%';
+        loadingMessage.style.transform = 'translate(-50%, -50%)';
+        loadingMessage.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+        loadingMessage.style.color = 'white';
+        loadingMessage.style.padding = '15px 20px';
+        loadingMessage.style.borderRadius = '5px';
+        loadingMessage.style.zIndex = '1000';
+        document.body.appendChild(loadingMessage);
+        
+        // Use setTimeout to allow the loading message to render
+        setTimeout(() => {
+            // Use html2canvas to capture the card
+            html2canvas(cardPreview, {
+                backgroundColor: null,
+                scale: 6, // Better quality
+                logging: false,
+                allowTaint: true,
+                useCORS: true
+            }).then(canvas => {
+                // Remove the loading message
+                document.body.removeChild(loadingMessage);
+                
+                // Convert canvas to blob
+                canvas.toBlob(function(blob) {
+                    // Create a temporary link element
+                    const link = document.createElement('a');
+                    link.download = 'eid-mubarak-card.png';
+                    
+                    // Create a URL for the blob
+                    link.href = URL.createObjectURL(blob);
+                    
+                    // Append to the document and trigger the download
+                    document.body.appendChild(link);
+                    link.click();
+                    
+                    // Clean up
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(link.href);
+                }, 'image/jpeg');
+            }).catch(error => {
+                // Remove the loading message
+                document.body.removeChild(loadingMessage);
+                
+                // Show error message
+                alert('দুঃখিত, ডাউনলোড করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+                console.error('html2canvas error:', error);
+            });
+        }, 100);
+    });
+    
+    // Share functionality using Web Share API
+    shareBtn.addEventListener('click', function() {
+        // First check if the browser supports the Web Share API
+        if (navigator.share) {
+            // Use html2canvas to capture the card
+            const loadingMessage = document.createElement('div');
+            loadingMessage.textContent = 'আপনার কার্ড শেয়ার করার জন্য প্রস্তুত করা হচ্ছে...';
+            loadingMessage.style.position = 'fixed';
+            loadingMessage.style.top = '50%';
+            loadingMessage.style.left = '50%';
+            loadingMessage.style.transform = 'translate(-50%, -50%)';
+            loadingMessage.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+            loadingMessage.style.color = 'white';
+            loadingMessage.style.padding = '15px 20px';
+            loadingMessage.style.borderRadius = '5px';
+            loadingMessage.style.zIndex = '1000';
+            document.body.appendChild(loadingMessage);
+            
+            html2canvas(cardPreview, {
+                backgroundColor: null,
+                scale: 2,
+                logging: false,
+                allowTaint: true,
+                useCORS: true
+            }).then(canvas => {
+                // Remove the loading message
+                document.body.removeChild(loadingMessage);
+                
+                // Convert canvas to blob
+                canvas.toBlob(async function(blob) {
+                    // Create a File object
+                    const file = new File([blob], 'eid-mubarak-card.png', { type: 'image/jpeg' });
+                    
+                    try {
+                        // Share the file
+                        await navigator.share({
+                            title: 'ঈদ মুবারক',
+                            text: 'আমার তৈরি করা ঈদ কার্ড দেখুন!',
+                            files: [file]
+                        });
+                        console.log('Card shared successfully');
+                    } catch (error) {
+                        // If file sharing fails, try without file (some devices don't support file sharing)
+                        if (error.name !== 'AbortError') {
+                            try {
+                                await navigator.share({
+                                    title: 'ঈদ মুবারক',
+                                    text: 'আমার তৈরি করা ঈদ কার্ড দেখুন!'
+                                });
+                                console.log('Card shared successfully (without file)');
+                            } catch (fallbackError) {
+                                if (fallbackError.name !== 'AbortError') {
+                                    alert('শেয়ার করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+                                    console.error('Share error:', fallbackError);
+                                }
+                            }
+                        }
+                    }
+                }, 'image/jpeg');
+            }).catch(error => {
+                // Remove the loading message
+                document.body.removeChild(loadingMessage);
+                
+                // Show error message
+                alert('দুঃখিত, শেয়ার করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+                console.error('html2canvas error:', error);
+            });
+        } else {
+            // Web Share API is not supported
+            alert('দুঃখিত, আপনার ব্রাউজারে শেয়ার ফিচার সমর্থিত নয়। অন্য উপায়ে চেষ্টা করুন।');
+        }
+    });
+
+    // ইউজার ইমেজ আপলোড হ্যান্ডেলিং
+    userImageInput.addEventListener('change', function(e) {
+    if (e.target.files && e.target.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            // ইউজার ইমেজ এলিমেন্ট তৈরি করুন যদি নেই
+            if (!userImageContainer) {
+                userImageContainer = document.createElement('div');
+                userImageContainer.className = 'user-image-container';
+                
+                userImageElement = document.createElement('img');
+                userImageContainer.appendChild(userImageElement);
+                
+                // যদি ইলাস্ট্রেশন এলিমেন্ট থাকে, তাহলে তার পরে ইমেজ কন্টেইনার যোগ করুন
+                if (cardIllustration) {
+                    cardIllustration.after(userImageContainer);
+                } else {
+                    // না থাকলে টাইটেলের পরে যোগ করুন
+                    const cardTitle = cardPreview.querySelector('.card-title');
+                    cardTitle.after(userImageContainer);
+                }
+            }
+            
+            // ইমেজ সোর্স সেট করুন
+            userImageElement.src = e.target.result;
+            
+            // চেকবক্স অটোমেটিক চেক করুন এবং ইমেজ দেখান
+            useUserImageCheckbox.checked = true;
+            userImageContainer.style.display = 'flex';
+            
+            // ইলাস্ট্রেশন লুকান
+            if (cardIllustration) {
+                cardIllustration.style.display = 'none';
+            }
+        };
+        
+        reader.readAsDataURL(e.target.files[0]);
+    }
+});
+    
+    // ইউজার ইমেজ টগল করুন
+    useUserImageCheckbox.addEventListener('change', function() {
+        if (this.checked && userImageContainer) {
+            userImageContainer.style.display = 'flex';
+            if (cardIllustration) {
+                cardIllustration.style.display = 'none';
+            }
+        } else {
+            if (userImageContainer) {
+                userImageContainer.style.display = 'none';
+            }
+            if (cardIllustration && showIllustrationCheckbox.checked) {
+                cardIllustration.style.display = 'block';
+            }
+        }
+    });
+    
+    // Update message in real-time
+    messageInput.addEventListener('input', function() {
+        cardMessage.textContent = this.value;
+    });
+    
+    // Update name in real-time
+    nameInput.addEventListener('input', function() {
+        cardName.textContent = '- ' + this.value;
+    });
+    
+    // Template selection
+    templates.forEach(template => {
+        template.addEventListener('click', function() {
+            // Remove active class from all templates
+            templates.forEach(t => t.classList.remove('active'));
+
+            // Add active class to the clicked template
+            this.classList.add('active');
+
+            // Update the card preview to the selected template
+            const templateClass = this.getAttribute('data-template');
+            cardPreview.className = 'card-preview ' + templateClass;
+        });
+    });
+
+    // Toggle moon visibility
+    showMoonCheckbox.addEventListener('change', function() {
+        cardMoon.style.display = this.checked ? 'block' : 'none';
+    });
+
+    // Toggle illustration visibility
+    showIllustrationCheckbox.addEventListener('change', function() {
+        cardIllustration.style.display = this.checked ? 'block' : 'none';
+        
+        // যদি ইলাস্ট্রেশন হাইড করা হয় এবং ইউজার ইমেজ আছে, তাহলে ইউজার ইমেজ দেখান
+        if (!this.checked && userImageContainer && useUserImageCheckbox.checked) {
+            userImageContainer.style.display = 'flex';
+        } 
+        // যদি ইলাস্ট্রেশন শো করা হয় এবং ইউজার ইমেজও শো করা থাকে, তাহলে ইউজার ইমেজ হাইড করুন
+        else if (this.checked && userImageContainer && userImageContainer.style.display !== 'none') {
+            userImageContainer.style.display = 'none';
+        }
+    });
+    
+    
+    // Initialize with default values
+    cardMessage.textContent = messageInput.value;
+    cardName.textContent = '- ' + nameInput.value;
+    // কোডের শেষে "// Initialize with default values" কমেন্টের নিচে বা
+// downloadBtn, shareBtn ইভেন্ট লিসেনার এর পরে যোগ করুন:
+
+    // Initialize colors with default values
+    cardMessage.style.color = messageColorInput.value;
+    cardName.style.color = nameColorInput.value;
+    if (userImageContainer) {
+        userImageContainer.style.borderColor = borderColorInput.value;
+    }
+    cardTitle.style.color = eidTextColorInput.value;
+});
+
+
+document.addEventListener('DOMContentLoaded', function () {
+    const qrCodeBtn = document.getElementById('qrCodeBtn');
+    const qrModal = document.getElementById('qrModal');
+    const closeQRBtn = document.getElementById('closeQRBtn');
+    const downloadQRBtn = document.getElementById('downloadQRBtn');
+    const qrcodeContainer = document.getElementById('qrcode');
+    const cardPreview = document.querySelector('.card-preview');
+
+    // QR কোড জেনারেট করার জন্য ইভেন্ট লিসেনার
+    qrCodeBtn.addEventListener('click', function () {
+        if (!cardPreview) {
+            alert('কার্ড প্রিভিউ লোড করা যায়নি।');
+            console.error('Card preview element not found.');
+            return;
+        }
+
+        // html2canvas ব্যবহার করে কার্ডের ইমেজ তৈরি করুন
+        html2canvas(cardPreview, {
+            backgroundColor: null,
+            scale: 2,
+            logging: false,
+            allowTaint: true,
+            useCORS: true
+        }).then(canvas => {
+            // কার্ডের ইমেজ URL তৈরি করুন
+            const cardImageURL = canvas.toDataURL('image/png');
+
+            // QR কোড জেনারেট করুন
+            if (!qrcodeContainer) {
+                alert('QR কোড কন্টেইনার পাওয়া যায়নি।');
+                console.error('QR code container element not found.');
+                return;
+            }
+
+            qrcodeContainer.innerHTML = ''; // আগের QR কোড মুছে ফেলুন
+            new QRCode(qrcodeContainer, {
+                text: cardImageURL,
+                width: 200,
+                height: 200
+            });
+
+            // QR কোড মডাল দেখান
+            qrModal.style.display = 'flex';
+        }).catch(error => {
+            alert('QR কোড জেনারেট করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।');
+            console.error('QR Code Error:', error);
+        });
+    });
+
+    // QR কোড মডাল বন্ধ করার জন্য ইভেন্ট লিসেনার
+    closeQRBtn.addEventListener('click', function () {
+        qrModal.style.display = 'none';
+    });
+
+    // QR কোড ডাউনলোড করার জন্য ইভেন্ট লিসেনার
+    downloadQRBtn.addEventListener('click', function () {
+        const qrCanvas = qrcodeContainer.querySelector('canvas');
+        if (qrCanvas) {
+            const link = document.createElement('a');
+            link.href = qrCanvas.toDataURL('image/png');
+            link.download = 'eid-mubarak-qr-code.png';
+            link.click();
+        } else {
+            alert('QR কোড ডাউনলোড করতে সমস্যা হয়েছে।');
+        }
+    });
+});
+
+    </script>
+</body>
+</html>
